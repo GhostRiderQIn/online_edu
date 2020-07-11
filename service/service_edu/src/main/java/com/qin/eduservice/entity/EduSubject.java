@@ -1,11 +1,13 @@
 package com.qin.eduservice.entity;
 
-import com.baomidou.mybatisplus.annotation.*;
+import com.baomidou.mybatisplus.annotation.FieldFill;
+import com.baomidou.mybatisplus.annotation.IdType;
 
 import java.util.Date;
 
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
 import java.io.Serializable;
-
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -14,45 +16,32 @@ import lombok.experimental.Accessors;
 
 /**
  * <p>
- * 
+ * 课程科目
  * </p>
  *
  * @author testjava
- * @since 2020-07-05
+ * @since 2020-07-10
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-@ApiModel(value="EduTeacher对象", description="")
-public class EduTeacher implements Serializable {
+@ApiModel(value="EduSubject对象", description="课程科目")
+public class EduSubject implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @ApiModelProperty(value = "讲师ID")
+    @ApiModelProperty(value = "课程类别ID")
     @TableId(value = "id", type = IdType.ID_WORKER_STR)
     private String id;
 
-    @ApiModelProperty(value = "讲师姓名")
-    private String name;
+    @ApiModelProperty(value = "类别名称")
+    private String title;
 
-    @ApiModelProperty(value = "讲师简介")
-    private String intro;
+    @ApiModelProperty(value = "父ID")
+    private String parentId;
 
-    @ApiModelProperty(value = "讲师资历，一句话说明讲师")
-    private String career;
-
-    @ApiModelProperty(value = "头衔 1高级讲师 2首席讲师")
-    private Integer level;
-
-    @ApiModelProperty(value = "讲师头像")
-    private String avatar;
-
-    @ApiModelProperty(value = "排序")
+    @ApiModelProperty(value = "排序字段")
     private Integer sort;
-
-    @ApiModelProperty(value = "逻辑删除 1已删除 0未删除")
-    @TableLogic
-    private Boolean isDeleted;
 
     @ApiModelProperty(value = "创建时间")
     @TableField(fill = FieldFill.INSERT)
@@ -61,6 +50,5 @@ public class EduTeacher implements Serializable {
     @ApiModelProperty(value = "更新时间")
     @TableField(fill = FieldFill.INSERT_UPDATE)
     private Date gmtModified;
-
 
 }

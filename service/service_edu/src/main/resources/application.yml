@@ -1,7 +1,8 @@
 server:
   port: 8081
-
-
+#mybatis:
+#  configuration:
+#    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
 spring:
   application:
     name: service-edu
@@ -19,7 +20,3 @@ spring:
     date-format: yyyy-MM-dd HH:mm:ss
     time-zone: GMT+8
 
-# mbp日志显示
-mybatis-plus:
-  configuration:
-    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
