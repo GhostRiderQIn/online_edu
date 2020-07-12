@@ -36,6 +36,6 @@ public class EduLoginController {
     @GetMapping("/info")
     public Result info(){
 
-        return Result.ok().data("roles","[admin]").data("name","admin").data("avatar","http://b-ssl.duitang.com/uploads/item/201603/09/20160309181604_KmtFL.jpeg");
+        return Result.ok().data("roles","[admin]").data("name","admin").data("avatar","http://5b0988e595225.cdn.sohucs.com/images/20171117/95f02e8020104505b427420c88ae70c4.jpeg");
     }
 }

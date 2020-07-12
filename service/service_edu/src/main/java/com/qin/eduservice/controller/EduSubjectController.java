@@ -3,16 +3,16 @@ package com.qin.eduservice.controller;
 
 import com.qin.commonutils.Result;
 import com.qin.eduservice.entity.EduSubject;
+import com.qin.eduservice.entity.subject.OneSubject;
 import com.qin.eduservice.service.EduSubjectService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
-import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 /**
  * <p>
@@ -25,7 +25,7 @@ import org.springframework.web.multipart.MultipartFile;
 @RestController
 @RequestMapping("/eduservice/subject")
 @CrossOrigin
-@Api(description = "可能")
+@Api(description = "课程")
 public class EduSubjectController {
 
     @Autowired
@@ -45,6 +45,14 @@ public class EduSubjectController {
 
         subjectService.saveSubject(file, subjectService);
         return Result.ok();
+    }
+
+
+    @GetMapping("/getAllSubject")
+    public Result getAllSubject(){
+
+        List<OneSubject> list = subjectService.getAllSubject();
+        return Result.ok().data("list",list);
     }
 
 }
