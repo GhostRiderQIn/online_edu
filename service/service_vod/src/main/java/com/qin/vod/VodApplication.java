@@ -1,23 +1,22 @@
-package com.qin.eduservice;
+package com.qin.vod;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
-import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.annotation.ComponentScan;
 
 /**
  * @program: online_edu_parent
- * @description: 启动类
+ * @description:
  * @author: qinda
- * @create: 2020-07-05 23:15
+ * @create: 2020-07-14 16:50
  **/
-@SpringBootApplication
+@SpringBootApplication(exclude = DataSourceAutoConfiguration.class)
 @ComponentScan(basePackages = {"com.qin"})
-@EnableDiscoveryClient // nacos注册
-@EnableFeignClients // Feign服务发现
-public class EduApplication {
+@EnableDiscoveryClient
+public class VodApplication {
     public static void main(String[] args) {
-        SpringApplication.run(EduApplication.class,args);
+        SpringApplication.run(VodApplication.class,args);
     }
 }

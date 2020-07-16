@@ -2,9 +2,12 @@ package com.qin.eduservice.controller;
 
 
 import com.qin.commonutils.Result;
+import com.qin.eduservice.client.VodClient;
 import com.qin.eduservice.entity.EduVideo;
 import com.qin.eduservice.service.EduVideoService;
+import com.qin.servicebase.exception.MyException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -23,6 +26,8 @@ public class EduVideoController {
     @Autowired
     private EduVideoService eduVideoService;
 
+    @Autowired
+    private VodClient vodClient;
     /**
      * 增加小节
      * @param eduVideo
@@ -60,12 +65,21 @@ public class EduVideoController {
 
     /**
      * 删除小节
-     * TODO 删除小节时要删除视频
      * @param id
      * @return
      */
     @DeleteMapping("/{id}")
     public Result deleteVideo(@PathVariable String id){
+
+        EduVideo video = eduVideoService.getById(id);
+
+        if (!StringUtils.isEmpty(video.getVideoSourceId())){
+            Result result = vodClient.removeAliVideo(video.getVideoSourceId());
+            if (result.getCode() == 20001){
+                throw new MyException(20001,"删除视频失败...（熔断器）");
+            }
+
+        }
         eduVideoService.removeById(id);
         return Result.ok();
     }

@@ -19,4 +19,18 @@ spring:
   jackson:
     date-format: yyyy-MM-dd HH:mm:ss
     time-zone: GMT+8
+  # spring cloud nacos地址
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 127.0.0.1:8848
+mybatis-plus:
+  mapper-locations: classpath:com/qin/eduservice/mapper/xml/*.xml
 
+#开启熔断机制
+feign:
+  hystrix:
+    enabled: true
+hystrix:
+  metrics:
+    polling-interval-ms: 6000

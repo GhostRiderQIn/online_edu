@@ -4,10 +4,13 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.qin.eduservice.entity.EduCourse;
 import com.qin.eduservice.entity.EduCourseDescription;
 import com.qin.eduservice.entity.vo.CourseInfoVo;
+import com.qin.eduservice.entity.vo.CoursePublishVo;
 import com.qin.eduservice.mapper.EduCourseMapper;
+import com.qin.eduservice.service.EduChapterService;
 import com.qin.eduservice.service.EduCourseDescriptionService;
 import com.qin.eduservice.service.EduCourseService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.qin.eduservice.service.EduVideoService;
 import com.qin.servicebase.exception.MyException;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +30,13 @@ public class EduCourseServiceImpl extends ServiceImpl<EduCourseMapper, EduCourse
 
     @Autowired
     private EduCourseDescriptionService courseDescriptionService;
+
+    @Autowired
+    private EduChapterService chapterService;
+
+    @Autowired
+    private EduVideoService videoService;
+
 
     @Override
     public String saveCourseInfo(CourseInfoVo courseInfoVo) {
@@ -90,5 +100,29 @@ public class EduCourseServiceImpl extends ServiceImpl<EduCourseMapper, EduCourse
 
 
 
+    }
+
+    @Override
+    public CoursePublishVo getPublishCourseInfo(String id) {
+        return baseMapper.getPublishCourseInfo(id);
+    }
+
+    @Override
+    @Transactional
+    public void removeCourse(String courseId) {
+        //1 删除小节
+        videoService.removeVideoByCourseId(courseId);
+
+        //2 删除章节
+        chapterService.removeChapterByCourseId(courseId);
+
+        //3 删除描述
+        courseDescriptionService.removeById(courseId);
+
+        //4 删除课程
+        int res = baseMapper.deleteById(courseId);
+        if (res == 0){
+            throw new MyException(20001,"删除失败");
+        }
     }
 }
