@@ -14,8 +14,11 @@ import com.qin.eduservice.service.EduVideoService;
 import com.qin.servicebase.exception.MyException;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 /**
  * <p>
@@ -124,5 +127,15 @@ public class EduCourseServiceImpl extends ServiceImpl<EduCourseMapper, EduCourse
         if (res == 0){
             throw new MyException(20001,"删除失败");
         }
+    }
+
+
+    @Cacheable(key = "'selectHotCourseList'",value = "HotCourse")
+    @Override
+    public List<EduCourse> getTopHotCourse() {
+        QueryWrapper<EduCourse> wrapper = new QueryWrapper<>();
+        wrapper.orderByDesc("id");
+        wrapper.last("limit 8");
+        return baseMapper.selectList(wrapper);
     }
 }
