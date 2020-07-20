@@ -3,6 +3,8 @@ package com.qin.vod.controller;
 import com.aliyuncs.DefaultAcsClient;
 import com.aliyuncs.exceptions.ClientException;
 import com.aliyuncs.vod.model.v20170321.DeleteVideoRequest;
+import com.aliyuncs.vod.model.v20170321.GetVideoPlayAuthRequest;
+import com.aliyuncs.vod.model.v20170321.GetVideoPlayAuthResponse;
 import com.qin.commonutils.Result;
 import com.qin.servicebase.exception.MyException;
 import com.qin.vod.service.VodService;
@@ -68,5 +70,26 @@ public class VodController {
 
         vodService.removeBatchAliVideo(videoList);
         return Result.ok();
+    }
+
+
+    /**
+     * 获取视频凭证
+     * @param id
+     * @return
+     */
+    @GetMapping("/getPlayAuth/{id}")
+    public Result getPlayAuth(@PathVariable String id){
+        try {
+            DefaultAcsClient client = InitVodClient.initVodClient(ConstantVodUtil.KEY_ID, ConstantVodUtil.KEY_SECRET_ID);
+            GetVideoPlayAuthRequest request = new GetVideoPlayAuthRequest();
+            request.setVideoId(id);
+            GetVideoPlayAuthResponse response = client.getAcsResponse(request);
+
+            return Result.ok().data("playAuth",response.getPlayAuth());
+        }catch (Exception e) {
+            e.printStackTrace();
+            throw new MyException(20001,"获取视频凭证失败");
+        }
     }
 }

@@ -1,8 +1,12 @@
 package com.qin.eduservice.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.qin.eduservice.entity.EduCourse;
 import com.qin.eduservice.entity.EduCourseDescription;
+import com.qin.eduservice.entity.EduTeacher;
+import com.qin.eduservice.entity.frontvo.CourseFrontQueryVo;
+import com.qin.eduservice.entity.frontvo.CourseWebVo;
 import com.qin.eduservice.entity.vo.CourseInfoVo;
 import com.qin.eduservice.entity.vo.CoursePublishVo;
 import com.qin.eduservice.mapper.EduCourseMapper;
@@ -17,8 +21,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -137,5 +144,59 @@ public class EduCourseServiceImpl extends ServiceImpl<EduCourseMapper, EduCourse
         wrapper.orderByDesc("id");
         wrapper.last("limit 8");
         return baseMapper.selectList(wrapper);
+    }
+
+    @Override
+    public Map<String, Object> getCourseFrontInfo(Page<EduCourse> page, CourseFrontQueryVo courseQueryVo) {
+            QueryWrapper<EduCourse> wrapper = new QueryWrapper<>();
+            if (!StringUtils.isEmpty(courseQueryVo.getSubjectParentId())){
+                wrapper.eq("subject_parent_id",courseQueryVo.getSubjectParentId());
+            }
+            if (!StringUtils.isEmpty(courseQueryVo.getSubjectId())){
+                wrapper.eq("subject_id",courseQueryVo.getSubjectId());
+            }
+            if (!StringUtils.isEmpty(courseQueryVo.getBuyCountSort())){
+                wrapper.orderByDesc("buy_count");
+            }
+            if (!StringUtils.isEmpty(courseQueryVo.getGmtCreateSort())){
+                wrapper.orderByDesc("gmt_create");
+            }
+            if (!StringUtils.isEmpty(courseQueryVo.getPriceSort())){
+                wrapper.orderByDesc("price");
+            }
+
+            baseMapper.selectPage(page,wrapper);
+            List<EduCourse> records = page.getRecords();
+            long current = page.getCurrent();
+            long pages = page.getPages();
+            long size = page.getSize();
+            long total = page.getTotal();
+
+            boolean hasNext = page.hasNext();
+            boolean hasPrevious = page.hasPrevious();
+
+
+            Map<String, Object> map = new HashMap<>();
+
+            map.put("items", records);
+            map.put("current", current);
+            map.put("pages", pages);
+            map.put("size", size);
+            map.put("total", total);
+            map.put("hasNext", hasNext);
+            map.put("hasPrevious", hasPrevious);
+
+
+        return map;
+    }
+
+    /**
+     * 根据课程id查询详细信息
+     * @param id
+     * @return
+     */
+    @Override
+    public CourseWebVo getBaseCourseInfo(String id) {
+        return baseMapper.getBaseCourseInfo(id);
     }
 }

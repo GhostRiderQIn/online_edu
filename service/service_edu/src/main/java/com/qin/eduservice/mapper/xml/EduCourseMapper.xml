@@ -25,4 +25,37 @@
 
         where ec.id = #{courseId}
     </select>
+
+    <select id="getBaseCourseInfo" resultType="com.qin.eduservice.entity.frontvo.CourseWebVo">
+
+        select
+        ec.id,
+        ec.title,
+        ec.price,
+        ec.lesson_num lessonNum,
+        ec.buy_count buyCount,
+        ec.view_count viewCount,
+        ecd.description description,
+        et.id teacherId,
+        et.name teacherName,
+        et.avatar avatar,
+        et.intro intro,
+        ec.cover,
+        es.title subjectLevelOne,
+        es2.title subjectLevelTwo,
+        es.id subjectLevelOneId,
+        es2.id subjectLevelTwoId
+        from
+        edu_course ec
+        left join edu_course_description ecd
+        on ec.id = ecd.id
+        left join edu_teacher et
+        on ec.teacher_id = et.id
+        left join edu_subject es
+        on es.id = ec.subject_parent_id
+        left join edu_subject es2
+        on ec.subject_id = es2.id
+
+        where ec.id = #{id}
+    </select>
 </mapper>

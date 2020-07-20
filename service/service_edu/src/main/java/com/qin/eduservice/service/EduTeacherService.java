@@ -1,9 +1,11 @@
 package com.qin.eduservice.service;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.qin.eduservice.entity.EduTeacher;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -16,4 +18,6 @@ import java.util.List;
 public interface EduTeacherService extends IService<EduTeacher> {
 
     List<EduTeacher> getTopHotTeacher();
+
+    Map<String, Object> getTeacherFrontList(Page<EduTeacher> page);
 }
